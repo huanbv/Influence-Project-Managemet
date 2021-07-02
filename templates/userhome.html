@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>To do list app</title>
+    <link href="../static/bootstrap-4.0.0-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Header & Footer -->
+    {% extends "userbase.html" %}
+<!-- End Header & Footer -->
+
+<!-- Body -->
+{% block content %}
+    <div class="container">
+
+        <div class="jumbotron text-center">
+            <h1>Welcome {{ user.first_name }} {{ user.last_name }}</h1>
+        </div>
+        {% if user.tasks %}
+        <div>
+                 <p><a class="btn btn-lg btn-success btn-block" href="/newTask">New Task</a></p>
+        </div>
+        <div class="jumptron">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Task</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in user.tasks %}
+                        <tr class="{{ task.getPriorityClass() }} text-white">
+                            <td>{{ task.task_id }}</td>
+                            <td>{{ task.description }}</td>
+                            <td class="text-center">
+                                <form action="/doneTask" method="post">
+                                    <input type="hidden" name="hiddenTaskId" value="{{ task.task_id }}"/>
+                                    <button type="submit" class="btn btn-success" >Done</button>
+                                </form>
+                            </td>
+                            <td class="text-center">
+                                <form action="/updateTask" method="post">
+                                    <input type="hidden" name="hiddenTaskId" value="{{ task.task_id }}"/>
+                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                </form>
+                            </td>
+                            <td class="text-center">
+                                <form action="/deleteTask" method="post">
+                                    <input type="hidden" name="hiddenTaskId" value="{{ task.task_id }}"/>
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="jumtron text-center">
+            <div class="alert alert-waring text-center">
+                <h4>You do not have task in list!</h4>
+            </div>
+            <p class="lead"></p>
+            <p><a class="btn btn-lg btn-success" href="/newTask">New Task</a></p>
+        </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
+<!-- End Body -->
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>To do list app</title>
+    <link href="../static/bootstrap-4.0.0-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Header & Footer -->
+    {% extends "base.html" %}
+<!-- End Header & Footer -->
+
+<!-- Body -->
+{% block content %}
+    <div class="container">
+
+        <div class="jumbotron text-center">
+            <h1>To do list app</h1>
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.inputFirstName.label(class="sr-only") }}
+                    {{ form.inputFirstName(class="form-control", placeholder="First Name") }}
+                    {% if form.inputFirstName.errors %}
+                        {% for error in form.inputFirstName.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> [{{ error }}]
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                 <div class="form-group">
+                    {{ form.inputLastName.label(class="sr-only") }}
+                    {{ form.inputLastName(class="form-control", placeholder="Last Name") }}
+                    {% if form.inputLastName.errors %}
+                        {% for error in form.inputLastName.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> [{{ error }}]
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.inputEmail.label(class="sr-only") }}
+                    {{ form.inputEmail(class="form-control", placeholder="Email address") }}
+                    {% if form.inputEmail.errors %}
+                        {% for error in form.inputEmail.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> [{{ error }}]
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.inputPassword.label(class="sr-only") }}
+                    {{ form.inputPassword(class="form-control", placeholder="Password") }}
+                    {% if form.inputPassword.errors %}
+                        {% for error in form.inputPassword.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> [{{ error }}]
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.inputConfirmPassword.label(class="sr-only") }}
+                    {{ form.inputConfirmPassword(class="form-control", placeholder="Confirm Password") }}
+                    {% if form.inputConfirmPassword.errors %}
+                        {% for error in form.inputConfirmPassword.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> [{{ error }}]
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <p class="lead"></p>
+                {{ form.submit(class="btn btn-lg btn-success btn-block") }}
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
+<!-- End Body -->
+</body>
+</html>

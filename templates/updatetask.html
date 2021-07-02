@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>To do list app</title>
+    <link href="../static/bootstrap-4.0.0-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Header & Footer -->
+    {% extends "base.html" %}
+<!-- End Header & Footer -->
+
+<!-- Body -->
+{% block content %}
+    <div class="container">
+
+        <div class="jumbotron text-center">
+            <h1>To do list app</h1>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.inputDescription(class="form-control", placeholder="To do...") }}
+                    {% if form.inputDescription.errors %}
+                        {% for error in form.inputDescription.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> [{{ error }}]
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.inputPriority(class="form-control", placeholder="Priority") }}
+                </div>
+                <p class="lead"></p>
+                <p>
+                    {{ form.submit(class="btn btn-lg btn-success btn-block") }}
+                    <a class="btn btn-lg btn-warning btn-block" href="/userHome">Cancel</a>
+                </p>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
+<!-- End Body -->
+</body>
+</html>

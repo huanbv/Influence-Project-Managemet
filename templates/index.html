@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>To do list app</title>
+    <link href="../static/bootstrap-4.0.0-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Header & Footer -->
+    {% extends "base.html" %}
+<!-- End Header & Footer -->
+
+<!-- Body -->
+{% block content %}
+    <div class="container">
+        <div class="jumptron">
+            <h1>To do list app</h1>
+            <p class="lead"></p>
+            <p class="btn-lg btn-success"><a href="/signUp">Sign up now</a></p>
+        </div>
+
+        <div class="row marketing">
+            {% for todoitem in todolist %}
+            <div class="col-sm-4">
+                <h4>{{ todoitem.name }}</h4>
+                <p>{{ todoitem.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+<!-- End Body -->
+</body>
+</html>
