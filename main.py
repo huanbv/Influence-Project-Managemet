@@ -85,7 +85,7 @@ def userHome():
         _user_id = session.get('user')
         if _user_id:
             user = db.session.query(models.User).filter_by(user_id=_user_id).first()
-            return render_template('userHome.html', user=user)
+            return render_template('userhome.html', user=user)
         else:
             return redirect('/')
 
