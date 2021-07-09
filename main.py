@@ -278,8 +278,10 @@ def deleteProject(project_id):
 
 @app.route('/project/<int:project_id>', methods=['GET'])
 def project(project_id):
+
     _user_id = session.get('user')
     if _user_id:
+
         user = db.session.query(models.User).filter_by(user_id=_user_id).first()
 
         the_project = db.session.query(models.Project).get(project_id)
