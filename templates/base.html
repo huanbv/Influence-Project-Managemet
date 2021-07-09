@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>To do list app</title>
-    <link href="../static/bootstrap-4.0.0-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='/bootstrap-4.0.0-dist/css/bootstrap.min.css') }}" rel="stylesheet">
 </head>
 <body>
 <!-- Header -->
     <div class="jumbotron" style="margin-bottom:0">
-        <a class="navbar-brand" href="#">
-            <img src="../static/images/logo-bvu.png" alt="logo" style="height:100px">
+        <a class="navbar-brand" href="/">
+            <img src="{{ url_for('static', filename='/images/logo-bvu.png') }}" alt="logo" style="height:100px">
         </a>
     </div>
 

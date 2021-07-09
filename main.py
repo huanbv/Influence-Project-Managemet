@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, flash, session
 from werkzeug.utils import redirect
 
-from forms import SignUpForm, SignInForm, TaskForm
+from forms import SignUpForm, SignInForm, TaskForm, ProjectForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
@@ -13,13 +13,22 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ap
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate()
+with app.app_context():
+    # allow dropping column for sqlite
+    if db.engine.url.drivername == 'sqlite':
+        migrate.init_app(app, db, render_as_batch=True)
+    else:
+        migrate.init_app(app, db)
 
 import models
 
 
 @app.route('/')
 def main():
+    _user_id = session.get('user')
+    if _user_id:
+        return redirect('/userHome')
 
     todolist = [
         {
@@ -48,6 +57,10 @@ def signup():
         if(db.session.query(models.User).filter_by(email=_email).count() == 0):
             user = models.User(first_name=_firstName, last_name=_lastName, email=_email)
             user.set_password(_password)
+
+            # backref
+            # user.tasks
+
             db.session.add(user)
             db.session.commit()
             return render_template('signUpSuccess.html', user=user)
@@ -96,82 +109,187 @@ def logOut():
     return redirect('/')
 
 
+
+
 @app.route('/newTask', methods=['GET', 'POST'])
 def newTask():
     _user_id = session.get('user')
-    form = TaskForm()
-    form.inputPriority.choices = [(p.priority_id, p.text) for p in db.session.query(models.Priority).all()]
     if _user_id:
         user = db.session.query(models.User).filter_by(user_id=_user_id).first()
 
+        form = TaskForm()
+        form.inputPriority.choices = [(p.priority_id, p.text) for p in db.session.query(models.Priority).all()]
+        form.inputStatus.choices = [(p.status_id, p.description) for p in db.session.query(models.Status).all()]
+        form.inputProject.choices = [(p.project_id, p.name) for p in db.session.query(models.Project).filter_by(user_id=_user_id).all()]
+
         if form.validate_on_submit():
-            _description = form.inputDescription.data
-            _priority_id = form.inputPriority.data
-            priority = db.session.query(models.Priority).filter_by(priority_id=_priority_id).first()
+            task = models.Task(
+                description=form.inputDescription.data,
+                deadline=form.inputDeadline.data,
+                priority_id=form.inputPriority.data,
+                project_id=form.inputProject.data,
+                status_id=1
+            )
 
-            _task_id = request.form['hiddenTaskId']
-            if _task_id == "0":
-                task = models.Task(description=_description, user=user, priority=priority)
-                db.session.add(task)
-            else:
-                task = db.session.query(models.Task).filter_by(task_id=_task_id).first()
-                task.description = _description
-                task.priority = priority
-
+            db.session.add(task)
             db.session.commit()
             return redirect('/userHome')
 
+        form.inputStatus.render_kw = { 'readonly': 'true', 'style':'pointer-events: none' }
         return render_template('/newtask.html', form=form, user=user)
 
     return redirect('/')
 
 
-@app.route('/updateTask', methods=['GET', 'POST'])
-def updateTask():
+@app.route('/task/edit/<int:task_id>', methods=['GET', 'POST'])
+def editTask(task_id):
     _user_id = session.get('user')
-    form = TaskForm()
-    form.inputPriority.choices = [(p.priority_id, p.text) for p in db.session.query(models.Priority).all()]
     if _user_id:
         user = db.session.query(models.User).filter_by(user_id=_user_id).first()
-        _task_id = request.form['hiddenTaskId']
-        if _task_id:
-            task = db.session.query(models.Task).filter_by(task_id=_task_id).first()
-            form.inputDescription.default = task.description
-            form.inputPriority.default = task.priority_id
-            form.process()
-            return render_template('/newtask.html', form=form, user=user, task=task)
+
+        form = TaskForm()
+        form.inputPriority.choices = [(p.priority_id, p.text) for p in db.session.query(models.Priority).all()]
+        form.inputStatus.choices = [(p.status_id, p.description) for p in db.session.query(models.Status).all()]
+        form.inputProject.choices = [(p.project_id, p.name) for p in db.session.query(models.Project).filter_by(user_id=_user_id).all()]
+
+        the_task = db.session.query(models.Task).filter_by(task_id=task_id).first()
+
+        if form.validate_on_submit():
+            the_task.description = form.inputDescription.data
+            the_task.deadline = form.inputDeadline.data
+            the_task.priority_id = form.inputPriority.data
+            the_task.project_id = form.inputProject.data
+            the_task.status_id = form.inputStatus.data
+            db.session.commit()
+
+            # invoking this to update the associated project status
+            update_project_status(the_task.project)
+            return redirect(f"/project/{request.args.get('project_id')}")
+
+        form.inputDescription.default = the_task.description
+        form.inputDeadline.default = the_task.deadline
+        form.inputPriority.default = the_task.priority_id
+        form.inputStatus.default = the_task.status_id
+        form.inputProject.default = the_task.project_id
+        form.process()
+        return render_template('/newtask.html', form=form, user=user)
 
     return redirect('/')
 
 
-@app.route('/doneTask', methods=['GET', 'POST'])
-def doneTask():
+def update_project_status(the_project):
+    in_progress_tasks = list(filter(lambda task: task.status_id == 2, the_project.tasks))
+    # at least 1 in progress task is exists
+    if len(in_progress_tasks) >= 1:
+        the_project.status_id = 2
+        db.session.commit()
+        return
+
+
+    finished_tasks = list(filter(lambda task: task.status_id == 4, the_project.tasks))
+    # all the tasks in the_project have completed
+    if len(finished_tasks) == len(the_project.tasks):
+        the_project.status_id = 4
+        db.session.commit()
+        return
+
+
+    # otherwise, it's not started
+    the_project.status_id = 1
+    db.session.commit()
+
+
+@app.route('/task/delete/<int:task_id>', methods=['GET', 'POST'])
+def deleteTask(task_id):
     _user_id = session.get('user')
     if _user_id:
-        _task_id = request.form['hiddenTaskId']
-        if _task_id:
-            task = db.session.query(models.Task).filter_by(task_id=_task_id).first()
-            task.isCompleted = True
-            db.session.commit()
 
-            return redirect('/userHome')
+        task = db.session.query(models.Task).filter_by(task_id=task_id).first()
+        db.session.delete(task)
+        db.session.commit()
+        return redirect(f"/project/{request.args.get('project_id')}")
 
     return redirect('/')
 
 
-@app.route('/deleteTask', methods=['GET', 'POST'])
-def deleteTask():
+
+
+@app.route('/newProject', methods=['GET', 'POST'])
+def newProject():
     _user_id = session.get('user')
     if _user_id:
-        _task_id = request.form['hiddenTaskId']
-        if _task_id:
-            task = db.session.query(models.Task).filter_by(task_id=_task_id).first()
-            db.session.delete(task)
+        user = db.session.query(models.User).filter_by(user_id=_user_id).first()
+
+        form = ProjectForm()
+        if form.validate_on_submit():
+            _name = form.inputName.data
+            _description = form.inputDescription.data
+            _deadline = form.inputDeadline.data
+
+            project = models.Project(name=_name, description=_description, deadline=_deadline, user=user, status_id=1)
+            db.session.add(project)
             db.session.commit()
+            return redirect('/')
 
-            return redirect('/userHome')
+        return render_template('/newproject.html', form=form, user=user)
 
+    return redirect('/')
+
+
+@app.route('/project/edit/<int:project_id>', methods=['GET', 'POST'])
+def editProject(project_id):
+    _user_id = session.get('user')
+    if _user_id:
+        user = db.session.query(models.User).filter_by(user_id=_user_id).first()
+
+        the_project = db.session.query(models.Project).get(project_id)
+        form = ProjectForm()
+
+        if form.validate_on_submit():
+            the_project.name = form.inputName.data
+            the_project.description = form.inputDescription.data
+            the_project.deadline = form.inputDeadline.data
+            the_project.user_id = _user_id
+            db.session.commit()
+            return redirect('/')
+
+        # gan du lieu cu ra form de chinh sua
+        form.inputName.data = the_project.name
+        form.inputDescription.data = the_project.description
+        form.inputDeadline.data = the_project.deadline
+        return render_template('newproject.html', form=form, user=user)
+
+    return redirect('/')
+
+
+@app.route('/project/delete/<int:project_id>', methods=['GET', 'POST'])
+def deleteProject(project_id):
+    _user_id = session.get('user')
+    if _user_id:
+        user = db.session.query(models.User).filter_by(user_id=_user_id).first()
+
+        the_project = db.session.query(models.Project).get(project_id)
+        db.session.delete(the_project)
+        db.session.commit()
         return redirect('/')
+
+    return redirect('/')
+
+
+@app.route('/project/<int:project_id>', methods=['GET'])
+def project(project_id):
+    _user_id = session.get('user')
+    if _user_id:
+        user = db.session.query(models.User).filter_by(user_id=_user_id).first()
+
+        the_project = db.session.query(models.Project).get(project_id)
+        if not the_project.user_id == user.user_id:
+            flash('You don\'t own this Project')
+            return redirect('/')
+
+        return render_template('project.html', project=the_project)
+
+    return redirect('/')
 
 
 if __name__ == '__main__':

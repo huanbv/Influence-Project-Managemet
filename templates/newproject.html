@@ -3,11 +3,10 @@
 <!-- Body -->
 {% block content %}
     <div class="container">
-
-        <div class="jumbotron">
+       <div class="jumbotron">
             <h1 class="mb-5">To do list app</h1>
 
-            <form action="" method="post">
+            <form action="" method="POST">
                 {{ form.hidden_tag() }}
 
                 {% for field in form if not field.name == 'csrf_token' %}
@@ -25,7 +24,7 @@
                 {% endfor %}
 
                 <p>
-                    <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-block mb-2 mt-5">Submit</button>
                     <a class="btn btn-lg btn-warning btn-block" href="/Projects">Cancel</a>
                 </p>
             </form>

@@ -1,0 +1,44 @@
+{% extends "userbase.html" %}
+
+{% block content %}
+
+    <div class="jumbotron mb-5">
+        <h2 class="mb-3">{{ project.name }}</h2>
+        <h5>Deadline: {{ project.deadline }}</h5>
+        <h5>Status: {{ project.status.description }}</h5>
+        <h5>Description: {{ project.description }}</h5>
+    </div>
+
+    {% if project.tasks %}
+         <table class="table table-fixed table-striped table-bordered table-hover mx-4">
+            <thead>
+                <tr>
+                    <th>Desc</th>
+                    <th>Deadline</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in project.tasks %}
+                    <tr class="">
+                        
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.deadline }}</td>
+                        <td><span class="{{task.get_priority_class()}} rounded text-white px-3 py-1">{{ task.priority.text }}</span></td>
+                        <td>{{ task.status.description }}</td>
+                        <td>
+                            <a href="{{ url_for('editTask', project_id=project.project_id, task_id=task.task_id) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ url_for('deleteTask', project_id=project.project_id, task_id=task.task_id) }}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %} 
+        <h6>No Tasks created.</h6>
+    {% endif %}
+
+{% endblock %}

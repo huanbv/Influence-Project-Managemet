@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField
+from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired
 
 
@@ -19,13 +20,35 @@ class SignUpForm(FlaskForm):
 
 class SignInForm(FlaskForm):
     inputEmail = StringField('Email Address', [DataRequired(message="Please enter your email address")])
-    inputPassword = PasswordField('Password',
-                                  [EqualTo('inputPassword', message="password does not!")])
+    inputPassword = PasswordField('Password', [EqualTo('inputPassword', message="password does not!")])
     submit = SubmitField('Sign In')
 
 
 class TaskForm(FlaskForm):
     inputDescription = StringField('Task Description', [DataRequired(message="Please enter your task content!")])
-    inputPriority = SelectField('Priority', coerce=int)
+    inputDeadline = DateTimeLocalField('Project Deadline', format='%Y-%m-%dT%H:%M', validators=[DataRequired(message="Please enter your task dateline!")])
 
-    submit = SubmitField('Create Task')
+    inputPriority = SelectField('Priority', coerce=int)
+    inputStatus = SelectField('Status', coerce=int)
+    inputProject = SelectField('Project', coerce=int)
+
+    # custom validation
+    def validate(self):
+        if not FlaskForm.validate(self):
+            return False
+
+        import models
+        the_project = models.Project.query.get(self.inputProject.data)
+
+        if self.inputDeadline.data > the_project.deadline:
+            self.inputDeadline.errors.append(f'Deadline cannot longer than its parent project ({the_project.deadline})')
+            return False
+
+        return True
+
+
+class ProjectForm(FlaskForm):
+    inputName = StringField('Project Name', [DataRequired(message="Please enter your project name!")])
+    inputDescription = StringField('Project Description', [DataRequired(message="Please enter your project content!")])
+    inputDeadline = DateTimeLocalField('Project Deadline', format='%Y-%m-%dT%H:%M', validators=[DataRequired(message="Please enter your project dateline!")])
+
