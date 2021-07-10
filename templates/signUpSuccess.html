@@ -4,8 +4,8 @@
 
 <!-- Body -->
 {% block content %}
-    <div class="container">
-        <div class="jumptron text-center">
+    <div class="container" style="margin-top:7%;">
+        <div class="jumbotron text-center mt-5">
             <h1>{{ user.first_name }} {{ user.last_name }}</h1>
             <p>Your email: {{ user.email }}</p>
             <p>Your password: {{ user.password_hash }}</p>

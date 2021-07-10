@@ -40,10 +40,15 @@
                 {% endfor %}
             </tbody>
         </table>
-
-    {% else %} 
-        <h6>No Tasks created.</h6>
-    {% endif %}
+    {% else %}
+        <div class="jumtron text-center">
+            <div class="alert alert-waring text-center">
+                <h4>No Tasks created.</h4>
+            </div>
+            <p class="lead"></p>
+            <p><a class="btn btn-lg btn-success" href="/newTask">New Task</a></p>
+        </div>
+    % endif %}
 </div>
      </div>
 {% endblock %}
