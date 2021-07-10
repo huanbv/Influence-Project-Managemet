@@ -17,6 +17,7 @@
                     <th>Deadline</th>
                     <th>Priority</th>
                     <th>Status</th>
+                    <th>Assigned to</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -28,6 +29,7 @@
                         <td>{{ task.deadline }}</td>
                         <td><span class="{{task.get_priority_class()}} rounded text-white px-3 py-1">{{ task.priority.text }}</span></td>
                         <td>{{ task.status.description }}</td>
+                        <td>{{ project.user.first_name}} {{ project.user.last_name}}</td>
                         <td>
                             <a href="{{ url_for('editTask', project_id=project.project_id, task_id=task.task_id) }}" class="btn btn-warning">Edit</a>
                             <a href="{{ url_for('deleteTask', project_id=project.project_id, task_id=task.task_id) }}" class="btn btn-danger">Delete</a>
