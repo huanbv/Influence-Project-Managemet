@@ -14,6 +14,7 @@
     {% if project.tasks %}
         <p class="lead"></p>
                 <p><a class="btn btn-lg btn-success btn-block" href="/newTask">New Task</a></p>
+        <div class="jumptron table-responsive-sm">
          <table class="table table-fixed table-striped table-bordered table-hover">
             <thead>
                 <tr>
@@ -42,6 +43,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
         {% else %}
             <div class="jumtron text-center">
                 <div class="alert alert-waring text-center">
