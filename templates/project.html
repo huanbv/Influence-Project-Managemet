@@ -2,7 +2,9 @@
 
 {% block content %}
 
-    <div class="jumbotron mb-5">
+ <div class="container">
+    <div class="jumbotron mt-5">
+    <div>
         <h2 class="mb-3">{{ project.name }}</h2>
         <h5>Deadline: {{ project.deadline }}</h5>
         <h5>Status: {{ project.status.description }}</h5>
@@ -42,5 +44,6 @@
     {% else %} 
         <h6>No Tasks created.</h6>
     {% endif %}
-
+</div>
+     </div>
 {% endblock %}
