@@ -1,59 +1,86 @@
-<!-- Header & Footer -->
-    {% extends "userbase.html" %}
-<!-- End Header & Footer -->
-
-<!-- Body -->
+{% extends "userbase.html" %}
 {% block content %}
-    <div class="container">
-
-        <div class="jumbotron text-center mt-5">
-            <h1>Welcome {{ user.first_name }} {{ user.last_name }}</h1>
-        </div>
-        {% if user.projects %}
-        <div>
-                 <p><a class="btn btn-lg btn-success btn-block" href="/newProject">New Project</a></p>
-        </div>
-
-        <div class="jumptron table-responsive-sm">
-            <table class="table table-striped table-bordered table-hover">
-                <thead>
-                    <tr class="text-center">
-                        <th>Name</th>
-                        <th>Desc</th>
-                        <th>Deadline</th>
-                        <th>Status</th>
-                        <th>Members</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for project in user.projects %}
-                        <tr class="">
-                            <td><a href="{{ url_for('project', project_id=project.project_id) }}">{{ project.name }}</a></td>
-                            <td>{{ project.description }}</td>
-                            <td>{{ project.deadline }}</td>
-                            <td>{{ project.status.description }}</td>
-                            <td>{{ project.user.first_name}} {{ project.user.last_name}}</td>
-                            <td>
-                                <a href="{{ url_for('project', project_id=project.project_id) }}" class="btn btn-primary">View</a>
-                                <a href="{{ url_for('editProject', project_id=project.project_id) }}" class="btn btn-warning">Edit</a>
-                                <a href="{{ url_for('deleteProject', project_id=project.project_id) }}" class="btn btn-danger">Delete</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="jumtron text-center">
-            <div class="alert alert-waring text-center">
-                <h4>You do not have project in list!</h4>
+ <div class="right_col">
+      {% if user.projects %}
+      <div class="page-title">
+         <div class="title_left">
+            <h3>Projects <small><a class="btn btn-lg btn-success" href="/newProject">New Project</a></small></h3>
+         </div>
+         <div class="title_right">
+            <div class="col-md-5 col-sm-5   form-group pull-right top_search">
+               <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search for...">
+                  <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button">Go!</button>
+                  </span>
+               </div>
             </div>
-            <p class="lead"></p>
-            <p><a class="btn btn-lg btn-success" href="/newProject">New Project</a></p>
-        </div>
-        {% endif %}
-
-    </div>
+         </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+         <div class="col-md-12">
+            <div class="x_panel">
+               <div class="x_title">
+                  <h2>Projects</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                           <a class="dropdown-item" href="#">Settings 1</a>
+                           <a class="dropdown-item" href="#">Settings 2</a>
+                        </div>
+                     </li>
+                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                  </ul>
+                  <div class="clearfix"></div>
+               </div>
+               <div class="x_content">
+                  <table class="table table-striped projects table-hover">
+                     <thead>
+                        <tr>
+                           <th>Project Name</th>
+                           <th>Desc</th>
+                           <th>Deadline</th>
+                           <th>Status</th>
+                           <th>Team Members</th>
+                           <th>Actions</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for project in user.projects %}
+                        <tr>
+                           <td><a href="{{ url_for('project', project_id=project.project_id) }}">{{ project.name }}</a></td>
+                           <td>{{ project.description }}</td>
+                           <td>
+                              <ul class="list-inline">{{ project.deadline }}</ul>
+                           </td>
+                           <td>{{ project.status.description }}</td>
+                           <td >{{ project.user.first_name}} {{ project.user.last_name}}</small></td>
+                           <td>
+                              <a href="{{ url_for('project', project_id=project.project_id) }}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                              <a href="{{ url_for('editProject', project_id=project.project_id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                              <a href="{{ url_for('deleteProject', project_id=project.project_id) }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+      {% else %}
+    <div class="clearfix"></div>
+      <div class="jumtron text-center">
+         <div class="alert alert-waring text-center">
+            <h4>You do not have any project in list!</h4>
+         </div>
+         <p class="lead"></p>
+         <p><a class="btn btn-lg btn-success" href="/newProject">Add New Project</a></p>
+      </div>
+{% endif %}
+</div>
+ </div>
 {% endblock %}
-<!-- End Body -->
