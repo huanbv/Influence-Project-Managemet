@@ -289,7 +289,7 @@ def project(project_id):
             flash('You don\'t own this Project')
             return redirect('/')
 
-        return render_template('project.html', project=the_project)
+        return render_template('project.html', project=the_project,  user=user)
 
     return redirect('/')
 
