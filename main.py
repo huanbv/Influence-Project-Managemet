@@ -13,8 +13,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ap
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-search = Search()
-search.init_app(app)
 migrate = Migrate()
 with app.app_context():
     # allow dropping column for sqlite
