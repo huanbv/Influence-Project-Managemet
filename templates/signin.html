@@ -1,14 +1,27 @@
-<!-- Header & Footer -->
-    {% extends "base.html" %}
-<!-- End Header & Footer -->
-
-<!-- Body -->
+<html lang="en">
+<head>
+      <!-- Bootstrap -->
+      <link href="{{ url_for('static', filename='/gentelella-master/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link href="{{ url_for('static', filename='/gentelella-master/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+      <!-- NProgress -->
+      <link href="{{ url_for('static', filename='/gentelella-master/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+      <!-- Custom Theme Style -->
+      <link href="{{ url_for('static', filename='/gentelella-master/build/css/custom.min.css') }}" rel="stylesheet">
+</head>
 {% block content %}
-    <div class="container" style="margin-top:7%;">
-
-        <div class="jumbotron text-center">
-            <h1>To do list app</h1>
+<body class="login">
+    <div>
+      <div class="login_wrapper">
+        <div class="animate form login_form bg-white px-2">
+          <section class="login_content">
+              <div>
+                <a class="navbar-brand" href="/">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo" style="height:100px">
+                </a>
+              </div>
             <form action="" method="post" novalidate>
+                <h1>Log In</h1>
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     {{ form.inputEmail.label(class="sr-only") }}
@@ -33,27 +46,29 @@
                     {% endif %}
                 </div>
                 <p class="lead"></p>
-                {{ form.submit(class="btn btn-lg btn-success btn-block") }}
-            </form>
-            <div class="jumbotron text-center">
-                <h2>Account demo</h2>
-                <table class="table table-striped table-bordered table-hover">
-                    <tr>
-                        <th>User name</th>
-                        <th>Password</th>
-                    </tr>
-                    <tr>
-                        <td>1@gmail.com</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td>hangtt@gmail.com</td>
-                        <td>123</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+              <div>
+                <button class="btn btn-lg btn-success submit btn-block" id="submit" name="submit" type="submit" value="Sign In">Log in</button>
+                <a class="btn-block text-dark" href="#">Lost your password?</a>
+              </div>
+              <div>
+                  <p>Demo account: Usename: 1@gmail.com - Password: 1</p>
+              </div>
 
-    </div></div>
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">New to site?
+                  <a href="/signUp" class="text-dark"> Create Account </a>
+                </p>
+                <p class="change_link">
+                  <a href="/" class="text-dark"> Back to website </a>
+                </p>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
 {% endblock %}
-<!-- End Body -->
+</html>

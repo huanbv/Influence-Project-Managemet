@@ -1,0 +1,248 @@
+{% extends "userbase.html" %}
+
+{% block content %}
+<!-- page content -->
+        <div class="right_col" role="main">
+
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Influencer Profile</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5  form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-secondary" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 ">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Influencer Report <small>Activity report</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                          </div>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-3 col-sm-3  profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          <img src="{{ url_for('static', filename='/gentelella-master/production/images/picture.jpg') }}" alt="Avatar" title="Change the avatar" class="img-responsive avatar-view">
+                        </div>
+                      </div>
+                      <h3>{{ influence.stage_name }}</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-map-marker user-profile-icon"></i> {{ influence.address }}, {{ influence.city }}, {{ influence.country }}
+                        </li>
+
+                        <li>
+                          <i class="fa fa-briefcase user-profile-icon"></i> {{ influence.career_name }}
+                        </li>
+                         <li>
+                          <i class="fa fa-clock-o user-profile-icon"></i> {{ influence.join_date }}
+                        </li>
+                         <li>
+                          <i class="fa fa-star user-profile-icon"></i> {{ influence.gender }}
+                        </li>
+                         <li>
+                          <i class="fa fa-briefcase user-profile-icon"></i> {{ influence.age}}
+                        </li>
+                         <li>
+                          <i class="fa fa-birthday-cake user-profile-icon"></i> {{ influence.data_of_birth }}
+                        </li>
+                         <li>
+                          <i class="fa fa-phone user-profile-icon"></i><a href="tel:{{ influence.phone_number }}"> {{ influence.phone_number }}</a>
+                        </li>
+                         <li>
+                             <i class="fa fa-envelope-o user-profile-icon"></i> <a href="mailto:{{ influence.email_address }}">{{ influence.email_address }}</a>
+                        </li>
+                         <li>
+                          <i class="fa fa-money user-profile-icon"></i> Income Range: {{ influence.income_range }}
+                        </li>
+
+                        <li class="m-top-xs">
+                          <i class="fa fa-external-link user-profile-icon"></i>
+                          <a href="" target="_blank">www.websiteveloper.com</a>
+                        </li>
+                      </ul>
+
+                      <a href="{{ url_for('editInfluence', kol_id=influence.kol_id) }}" class="btn btn-info"><i class="fa fa-edit m-right-xs"></i> Edit Profile</a>
+                      <br />
+
+
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 ">
+
+                      <div class="profile_title">
+                        <div class="col-md-6">
+                          <h2>Influencer Activity Report</h2>
+                        </div>
+                        <div class="col-md-6">
+                          <div id="reportrange" class="pull-right" style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #E6E9ED">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                            <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- start of user-activity-graph -->
+                      <div id="graph_bar" style="width:100%; height:280px;"></div>
+                      <!-- end of user-activity-graph -->
+
+                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Social Links</a>
+                          </li>
+                          <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Projects Worked on</a>
+                          </li>
+                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Profile Notes</a>
+                          </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                          <div role="tabpanel" class="tab-pane active " id="tab_content1" aria-labelledby="home-tab">
+
+                            <!-- start social links -->
+                            <ul class="messages">
+                            {% if influence.influenceSocials %}
+                                <p class="lead"></p>
+                                <p><a class="btn btn-lg btn-success btn-block" href="/newInfluenceSocialList">Add Social Information</a></p>
+                            <div class="clearfix"></div>
+                            <table class="table table-striped projects table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Social Name</th>
+                                        <th>Social Link</th>
+                                        <th>Social Followers</th>
+                                        <th>Manager</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                 <tbody>
+                                    {% for influence_social in influence.influenceSocials %}
+                                    <tr>
+                                       <td>{{ influence_social.social_name }}</td>
+                                       <td>{{ influence_social.social_link }}</td>
+                                       <td>{{ influence_social.social_followers }}</td>
+                                       <td>{{ influence.user.first_name}} {{ influence.user.last_name}}</td>
+                                       <td>
+                                           <a href="{{ url_for('editInfluenceSocial', kol_id=influence.kol_id, kol_social_id=influence_social.kol_social_id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                           <a href="{{ url_for('deleteInfluenceSocial', kol_id=influence.kol_id, kol_social_id=influence_social.kol_social_id) }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                                       </td>
+                                    </tr>
+                                    {% endfor %}
+                                 </tbody>
+                            </table>
+                            {% else %}
+                            <div class="jumtron text-center">
+                                <div class="alert alert-waring text-center">
+                                    <h4>No Influence Link created.</h4>
+                                </div>
+                                <p class="lead"></p>
+                                <p><a class="btn btn-lg btn-success" href="/newInfluenceSocialList">Add Influence Social Link</a></p>
+                            </div>
+                             {% endif %}
+                            </ul>
+                            <!-- end recent activity -->
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+                            <!-- start user projects -->
+                            <table class="data table table-striped no-margin">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Project Name</th>
+                                  <th>Client Company</th>
+                                  <th class="hidden-phone">Hours Spent</th>
+                                  <th>Contribution</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>New Company Takeover Review</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">18</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="35"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>New Partner Contracts Consultanci</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">13</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-danger" data-transitiongoal="15"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>3</td>
+                                  <td>Partners and Inverstors report</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">30</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="45"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>New Company Takeover Review</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">28</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="75"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- end user projects -->
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                            <p>Note: {{ influence.note }} </p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+        <!-- /page content -->
+{% endblock %}

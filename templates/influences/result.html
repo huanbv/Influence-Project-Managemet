@@ -1,0 +1,78 @@
+{% extends "userbase.html" %}
+{% block content %}
+<!-- page content -->
+<div class="right_col" role="main">
+    {% if user.influences %}
+     <div class="page-title">
+              <div class="title_left">
+                <h3>Influence List <small><a class="btn btn-lg btn-success" href="/newInfluence">New Influence</a></small></h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5  form-group pull-right top_search">
+
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+                <div class="x_panel">
+                  <div class="x_content">
+
+                      <div class="clearfix"></div>
+                      {% for influence in user.influences %}
+                      <div class="col-md-4 col-sm-4 profile_details">
+                        <div class="well profile_view">
+                          <div class="col-sm-12">
+                            <h4 class="brief"><i class="fa fa-tag"></i> <input type="checkbox" name=""> <i>{{ influence.career_name }}</i> <i class="fa fa-angle-double-right"></i><i class="{{influence.get_influence_status_class()}} rounded text-white"> {{ influence.influence_status.description}}</i></h4>
+                            <div class="left col-md-7 col-sm-7">
+                              <h2 class="brief text-uppercase font-weight-bold"><a href="{{ url_for('influence', kol_id=influence.kol_id) }}">{{ influence.stage_name }}</a></h2>
+                              <p><i class="fa fa-birthday-cake"></i> {{ influence.data_of_birth }} </p>
+                              <ul class="list-unstyled">
+                                <li><i class="fa fa-building"></i> {{ influence.country }}</li>
+                                <li><i class="fa fa-phone"></i> {{ influence.phone_number }}</li>
+                                <li><i class="fa fa-envelope"></i> {{ influence.email_address }}</li>
+                              </ul>
+                            </div>
+                            <div class="right col-md-5 col-sm-5 text-center">
+                              <img src="{{ url_for('static', filename='/gentelella-master/production/images/img.jpg') }}" alt="..." class="img-circle img-fluid">
+                            </div>
+                          </div>
+                          <div class=" profile-bottom text-center">
+
+                            <div class=" col-sm-12 emphasis">
+                               <a href="{{ url_for('influence', kol_id=influence.kol_id) }}" class="btn btn-primary"><i class="fa fa-user"> </i> View </a>
+                               <a href="{{ url_for('editInfluence', kol_id=influence.kol_id) }}" class="btn btn-info"><i class="fa fa-pencil"></i> Edit </a>
+                               <a href="{{ url_for('deleteInfluence', kol_id=influence.kol_id) }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Delete </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="clearfix"></div>
+            <div class="jumtron text-center">
+               <div class="alert alert-waring text-center">
+                  <h4>You do not have any influence in list!</h4>
+               </div>
+               <p class="lead"></p>
+               <p><a class="btn btn-lg btn-success" href="/newInfluence">Add New Influence</a></p>
+            </div>
+    {% endif %}
+<script>
+function checkAll(bx) {
+    var cbs = document.getElementsByTagName('input');
+    for(var i=0; i < cbs.length; i++) {
+        if(cbs[i].type == 'checkbox') {
+        cbs[i].checked = bx.checked;
+        }
+    }
+}
+</script>
+</div>
+{% endblock %}

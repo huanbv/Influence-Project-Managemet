@@ -1,0 +1,66 @@
+{% extends "userbase.html" %}
+{% block content %}
+<div class="right_col" role="main">
+   <div class="">
+      <div class="page-title">
+         <div class="title_left">
+            <h3>Add New Influence Social Link</h3>
+         </div>
+         <div class="title_right">
+            <div class="col-md-5 col-sm-5   form-group pull-right top_search">
+               <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search for...">
+                  <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button">Go!</button>
+                  </span>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="row">
+         <div class="col-md-12">
+            <div class="x_panel">
+               <div class="x_title">
+                  <h2>Add New Social Link Details</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                           <a class="dropdown-item" href="#">Settings 1</a>
+                           <a class="dropdown-item" href="#">Settings 2</a>
+                        </div>
+                     </li>
+                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                  </ul>
+                  <div class="clearfix"></div>
+               </div>
+               <div class="x_content">
+                  <form action="" method="post">
+                     {{ form.hidden_tag() }}
+                     {% for field in form if not field.name == 'csrf_token' %}
+                     <div class="form-group">
+                        {{ field.label() }}
+                        {{ field(class="form-control") }}
+                        {% if field.errors %}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                           <strong>Error:</strong> [{{ error }}]
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                     </div>
+                     {% endfor %}
+                     <p>
+                        <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+                        <a class="btn btn-lg btn-warning btn-block" href="/userInfluence">Cancel</a>
+                     </p>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}

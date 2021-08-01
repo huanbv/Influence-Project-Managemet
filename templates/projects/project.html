@@ -1,0 +1,91 @@
+{% extends "userbase.html" %}
+
+{% block content %}
+
+ <div class="right_col">
+     <div class="page-title">
+         <div class="title_left">
+            <h3>{{ project.name }}</h3>
+         </div>
+         <div class="title_right">
+            <div class="col-md-5 col-sm-5   form-group pull-right top_search">
+               <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search for...">
+                  <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button">Go!</button>
+                  </span>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div>
+        <h5>Deadline: {{ project.deadline }} | Status: {{ project.status.description }} | Description: {{ project.description }}</h5>
+    </div>
+
+    {% if project.tasks %}
+        <p class="lead"></p>
+        <p><a class="btn btn-lg btn-success btn-block" href="/newTask">New Task</a></p>
+        <div class="clearfix"></div>
+      <div class="row">
+         <div class="col-md-12">
+            <div class="x_panel">
+               <div class="x_title">
+                  <h2>Projects</h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                     <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                           <a class="dropdown-item" href="#">Settings 1</a>
+                           <a class="dropdown-item" href="#">Settings 2</a>
+                        </div>
+                     </li>
+                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                  </ul>
+                  <div class="clearfix"></div>
+               </div>
+               <div class="x_content">
+                  <table class="table table-striped projects table-hover">
+                    <thead>
+                        <tr>
+                            <th>Desc</th>
+                            <th>Deadline</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Assigned to</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                     <tbody>
+                        {% for task in project.tasks %}
+                        <tr>
+                           <td>{{ task.description }}</td>
+                           <td>{{ task.deadline }}</td>
+                           <td>
+                              <ul class="list-inline"><span class="{{task.get_priority_class()}} rounded text-white px-3 py-1">{{ task.priority.text }}</span></ul>
+                           </td>
+                           <td>{{ task.status.description }}</td>
+                           <td>{{ project.user.first_name}} {{ project.user.last_name}}</td>
+                           <td>
+                               <a href="{{ url_for('editTask', project_id=project.project_id, task_id=task.task_id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                               <a href="{{ url_for('deleteTask', project_id=project.project_id, task_id=task.task_id) }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                           </td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+        {% else %}
+            <div class="jumtron text-center">
+                <div class="alert alert-waring text-center">
+                    <h4>No Tasks created.</h4>
+                </div>
+                <p class="lead"></p>
+                <p><a class="btn btn-lg btn-success" href="/newTask">New Task</a></p>
+            </div>
+    {% endif %}
+     </div>
+{% endblock %}

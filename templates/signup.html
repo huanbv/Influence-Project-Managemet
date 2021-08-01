@@ -1,15 +1,28 @@
-<!-- Header & Footer -->
-    {% extends "base.html" %}
-<!-- End Header & Footer -->
-
-<!-- Body -->
+<html lang="en">
+<head>
+      <!-- Bootstrap -->
+      <link href="{{ url_for('static', filename='/gentelella-master/vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link href="{{ url_for('static', filename='/gentelella-master/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+      <!-- NProgress -->
+      <link href="{{ url_for('static', filename='/gentelella-master/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+      <!-- Custom Theme Style -->
+      <link href="{{ url_for('static', filename='/gentelella-master/build/css/custom.min.css') }}" rel="stylesheet">
+</head>
 {% block content %}
-    <div class="container" style="margin-top:7%;">
-
-        <div class="jumbotron text-center ">
-            <h1>To do list app</h1>
+<body class="login">
+    <div class="container">
+      <div class="login_wrapper">
+        <div class="animate form login_form bg-white px-2">
+          <section class="login_content">
+              <div>
+                <a class="navbar-brand" href="/">
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo" style="height:100px">
+                </a>
+              </div>
             <form action="" method="post" novalidate>
-                {{ form.hidden_tag() }}
+              <h1>Create Account</h1>
+              {{ form.hidden_tag() }}
                 <div class="form-group">
                     {{ form.inputFirstName.label(class="sr-only") }}
                     {{ form.inputFirstName(class="form-control", placeholder="First Name") }}
@@ -66,10 +79,26 @@
                     {% endif %}
                 </div>
                 <p class="lead"></p>
-                {{ form.submit(class="btn btn-lg btn-success btn-block") }}
+              <div>
+                <button class="btn btn-lg btn-success submit btn-block" id="submit" name="submit" type="submit" value="Sign Up">Sign Up</button>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">Already a member ?
+                  <a href="/signIn" class="text-dark"> Log in </a>
+                </p>
+                <p class="change_link">
+                  <a href="/" class="text-dark"> Back to website </a>
+                </p>
+              </div>
             </form>
+          </section>
         </div>
 
+      </div>
     </div>
+  </body>
 {% endblock %}
-<!-- End Body -->
+</html>

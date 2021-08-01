@@ -1,0 +1,10 @@
+{% extends "userbase.html" %}
+{% block content %}
+    <div class="right_col">
+        <div class=" text-center">
+            <h1>Hi, {{ user.first_name }} {{ user.last_name }}</h1>
+            <p>Your email: {{ user.email }}</p>
+            <p>Your password: {{ user.password_hash }}</p>
+        </div>
+    </div>
+{% endblock %}
