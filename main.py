@@ -4,7 +4,6 @@ from werkzeug.utils import redirect
 from forms import SignUpForm, SignInForm, TaskForm, ProjectForm, InfluenceForm, InfluenceSocialForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_msearch import Search
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
